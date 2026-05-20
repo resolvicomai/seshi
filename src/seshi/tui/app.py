@@ -34,6 +34,7 @@ class SeshiApp(App):
 
     chosen_session: Session | None = None
     current_view: reactive[str] = reactive("sessions")
+    _quit_toast_active: bool = False
 
     def __init__(self, ctx_obj: dict | None = None, conn: sqlite3.Connection | None = None, **kwargs):
         self.ctx_obj = ctx_obj or {}
@@ -92,6 +93,10 @@ class SeshiApp(App):
             self.query_one(SearchBar).accent = accent
         except Exception:
             pass
+
+    def action_request_quit(self) -> None:
+        self._quit_toast_active = True
+        super().action_request_quit()
 
     def _update_counts(self):
         header = self.query_one(Header)
